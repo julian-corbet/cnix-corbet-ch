@@ -12,6 +12,8 @@ import {
 test("reviewer policy narrowly allowlists public showcase hostnames", () => {
   const prompt = reviewerPrompt('{"artifact_sha256":"test"}')
   assert.match(prompt, /nix\[a-z0-9-\]\+\.corbet\.ch/)
+  assert.match(prompt, /product name nixea/)
+  assert.match(prompt, /npm\s+command names/)
   assert.match(prompt, /Do not extend this allowlist/)
   assert.match(prompt, /<candidate-json>/)
 })

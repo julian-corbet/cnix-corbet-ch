@@ -179,11 +179,15 @@ hostname cnix.corbet.ch; the public GitHub repository
 julian-corbet/cnix-corbet-ch; project showcase hostnames matching exactly
 nix[a-z0-9-]+.corbet.ch; and the product design in which cnix generates a
 technical project reference plus a distinct public marketing showcase at that
-project hostname. References to public projects such as Quartz and OKF are also
-intentionally public. Generic descriptions of a private overlay or publication
-threat model are intended public information; specific real values are not.
-Do not extend this allowlist to a different hostname pattern, an actual private
-value, or deployment-specific implementation evidence merely because it is
+project hostname. The future public product name nixea and its stated stable-ID
+adjacency to cnix are intentionally public. References to public projects such
+as Quartz and OKF are also intentionally public. This public repository's npm
+command names, CI checks, guardian design, contributor workflow, and documented
+release mechanics are public product behaviour. Generic descriptions of a
+private overlay or publication threat model are intended public information;
+specific real values are not. Do not extend this allowlist to a different
+hostname pattern, an actual private value, provider account detail, credential,
+private source path, or real deployed configuration merely because it is
 mentioned near an allowed identifier.
 
 Return the required JSON attestation. Copy artifact_sha256 exactly from the

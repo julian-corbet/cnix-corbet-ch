@@ -10,6 +10,9 @@
   the same reviewed project concepts that produce cnix technical references.
 - Extended the adversarial reviewer's explicit public allowlist only to the
   project-showcase hostname pattern and its documented product relationship.
+- Classified nixea adjacency and the public repository's own release mechanics
+  as intentional public product behaviour; removed an unsupported private work
+  perspective name.
 
 ## 2026-08-12
 

@@ -94,9 +94,11 @@ bytes cannot silently diverge.
 The reviewer's explicit public-identifier allowlist is narrow: `corbet.ch`,
 `cnix.corbet.ch`, the public cnix repository, and project showcase hostnames
 matching `nix[a-z0-9-]+.corbet.ch`. The public relationship between a cnix
-technical reference and its distinct project showcase is also intentional. This
-does not allow other host patterns, real configured values, or
-deployment-specific implementation evidence.
+technical reference and its distinct project showcase is also intentional. The
+name nixea, its stable-ID adjacency, and the cnix repository's own command, CI,
+guardian, and release mechanics are public product behaviour. This does not
+allow other host patterns, provider account details, credentials, private source
+paths, or real configured values.
 
 This model gate complements deterministic checks; it does not replace them.
 

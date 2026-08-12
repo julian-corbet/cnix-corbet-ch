@@ -71,7 +71,7 @@ keeps its own authority.
 
 ## Work awareness
 
-cnix may render a private read-only Pulse perspective over the existing Markdown
+cnix may render a private read-only work perspective over the existing Markdown
 task queue. It does not copy task state. Directory location remains the task
 state, and public work remains in GitHub issues and pull requests.
 
