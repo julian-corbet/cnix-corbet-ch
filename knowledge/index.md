@@ -23,6 +23,8 @@ boundary; they are the first end-to-end proof of the system they describe.
   security decision rather than a rendering option.
 - [Project showcases](system/project-showcases.md) — how each project gets a
   distinct marketing site without duplicating technical facts.
+- [Editorial policy](system/editorial-policy.md) — the audience, voice, and
+  evidence discipline for human- and model-written pages.
 - [Interoperability](system/interoperability.md) — how cnix plays with OKF, LLM
   Wiki, Obsidian, Quartz, and future nixea views.
 - [Operations](system/operations.md) — the unattended maintenance loop and

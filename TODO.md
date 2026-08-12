@@ -92,3 +92,18 @@ that needs a dedicated investigation or changes the publication trust boundary.
   publisher emits local assets, canonical SEO and LLM discovery files, related
   project and portfolio links, and reconciled `/docs` redirects, with every
   artifact passing the cnix publication guardian.
+
+## CNIX-0009 — Claim-bound editorial pipeline
+
+- Status: open
+- Severity: medium
+- Owner: unassigned
+- Evidence: The local model trial in `experiments/editorial-model-bakeoff.md`
+  found useful voice and adversarial restraint, but also a dropped material
+  claim, an echoed instruction, and inconsistent structured output.
+- Acceptance: Paragraph-level rewrite candidates receive only approved claim
+  IDs; the original and candidate remain paired; deterministic accounting and a
+  strong evidence-aware editor reject missing or added claims; model digest,
+  prompt version, timings, and verdict are recorded; seeded regressions cover
+  instruction echo, claim loss, malformed output, and unsupported maturity;
+  publication still requires the separate artifact guardian.
