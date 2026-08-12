@@ -135,13 +135,24 @@ function runReviewer(directory, prompt, output) {
     const child = spawn("codex", arguments_, {
       cwd: directory,
       env: reviewerEnvironment,
-      stdio: ["pipe", "inherit", "inherit"],
+      stdio: ["pipe", "ignore", "pipe"],
+    })
+    let stderr = ""
+    child.stderr.setEncoding("utf8")
+    child.stderr.on("data", (chunk) => {
+      stderr = `${stderr}${chunk}`.slice(-8000)
     })
     child.on("error", reject)
     child.on("exit", (code, signal) => {
       if (code === 0) resolve()
-      else
-        reject(new Error(`Adversarial reviewer exited with ${code ?? signal}`))
+      else {
+        const detail = stderr.trim().split("\n").slice(-12).join("\n")
+        reject(
+          new Error(
+            `Adversarial reviewer exited with ${code ?? signal}${detail ? `:\n${detail}` : ""}`,
+          ),
+        )
+      }
     })
     child.stdin.end(prompt)
   })
