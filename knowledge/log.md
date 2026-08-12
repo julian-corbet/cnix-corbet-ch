@@ -5,6 +5,9 @@
 - Defined the editorial register as architecture memo, restrained product brief,
   and FOSS README; local rewrites remain subordinate to claim review and a
   strong final editor.
+- Distinguished public source promotion from website deployment: internal
+  candidates require review before their first push because later deletion does
+  not remove Git history.
 - Added a hash-bound, structured adversarial privacy review to the release path.
 - Enabled fail-closed static publication through `npm run deploy`.
 - Marked the initial site as a working preview while project ingestion remains

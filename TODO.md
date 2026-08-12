@@ -107,3 +107,18 @@ that needs a dedicated investigation or changes the publication trust boundary.
   prompt version, timings, and verdict are recorded; seeded regressions cover
   instruction echo, claim loss, malformed output, and unsupported maturity;
   publication still requires the separate artifact guardian.
+
+## CNIX-0010 — Review source before public promotion
+
+- Status: open
+- Severity: critical
+- Owner: unassigned
+- Evidence: The repository is public, so a pushed candidate is visible in Git
+  history before CI or the exact-artifact deployment reviewer can reject it.
+  Deleting a file in a later commit does not retract the earlier publication.
+- Acceptance: Internal automation assembles the candidate in an isolated
+  non-public workspace; an independent reviewer receives the exact candidate
+  source inventory and bytes, denies uncertainty, and binds an allow verdict to
+  its tree hash; only that unchanged tree can be promoted to the public default
+  branch; seeded private operational details are rejected before any remote
+  push; the artifact guardian remains a separate later gate.

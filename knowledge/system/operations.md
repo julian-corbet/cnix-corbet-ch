@@ -42,6 +42,25 @@ Cheap models may enumerate files, extract headings, classify diffs, and prepare
 candidate lists. They do not decide privacy, architecture, synthesis, or final
 quality. Their output is evidence for a stronger author or reviewer.
 
+## Source promotion boundary
+
+This repository is public. A source candidate is therefore published when it is
+pushed to Git hosting, before CI runs and before the website release command
+reviews the built artifact. A later deletion does not remove it from Git
+history.
+
+Internal automated maintenance must assemble candidates outside the public
+working tree and subject the exact candidate source tree to independent review
+before promotion. A reviewed tree may then be committed to the public repository
+and proceed through the separate artifact release gate. Local Git hooks are
+useful defence in depth but are not the security boundary: they are not
+guaranteed to run in every clone.
+
+External pull requests are public proposals by definition. Their authors and
+reviewers must not use them to disclose private configuration. Implementing the
+internal source-promotion mechanism is tracked as
+[`CNIX-0010`](https://github.com/julian-corbet/cnix-corbet-ch/blob/main/TODO.md#cnix-0010--review-source-before-public-promotion).
+
 ## Lint policy
 
 Code, documentation, links, frontmatter, schemas, generated projections, and the
