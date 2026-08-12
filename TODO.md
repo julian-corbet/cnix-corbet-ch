@@ -64,3 +64,15 @@ that needs a dedicated investigation or changes the publication trust boundary.
   Quartz image plugins are disabled, reducing reachability but not removing it.
 - Acceptance: Upgrade or replace the dependency so `npm audit` reports no high
   severity advisory, then remove advisory `1124066` from the audit baseline.
+
+## CNIX-0007 — Replace deprecated secret-scanner runtime
+
+- Status: blocked
+- Severity: low
+- Owner: unassigned
+- Evidence: The pinned Gitleaks action declares Node.js 20; GitHub currently
+  forces it onto Node.js 24 and emits a runtime-deprecation warning. The scan
+  still succeeds.
+- Acceptance: Use a maintained, commit-pinned action or a checksum-pinned
+  official CLI scan that covers full history, leaves no report in the source
+  tree, and emits no runtime-deprecation warning.
