@@ -98,9 +98,9 @@ that needs a dedicated investigation or changes the publication trust boundary.
 - Status: open
 - Severity: medium
 - Owner: unassigned
-- Evidence: The local model trial in `experiments/editorial-model-bakeoff.md`
-  found useful voice and adversarial restraint, but also a dropped material
-  claim, an echoed instruction, and inconsistent structured output.
+- Evidence: Model-assisted editorial transformations can drop supported claims,
+  echo instructions, introduce new implications, or return malformed structured
+  output even when the draft reads well.
 - Acceptance: Paragraph-level rewrite candidates receive only approved claim
   IDs; the original and candidate remain paired; deterministic accounting and a
   strong evidence-aware editor reject missing or added claims; model digest,

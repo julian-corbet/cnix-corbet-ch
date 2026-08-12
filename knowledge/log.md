@@ -5,9 +5,6 @@
 - Defined the editorial register as architecture memo, restrained product brief,
   and FOSS README; local rewrites remain subordinate to claim review and a
   strong final editor.
-- Tested recent local editorial models and limited the selected 9B entrant to
-  paragraph-level rewrite proposals after observing both useful restraint and
-  unreliable claim preservation.
 - Added a hash-bound, structured adversarial privacy review to the release path.
 - Enabled fail-closed static publication through `npm run deploy`.
 - Marked the initial site as a working preview while project ingestion remains
