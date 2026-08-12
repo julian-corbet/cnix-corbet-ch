@@ -57,9 +57,9 @@ useful defence in depth but are not the security boundary: they are not
 guaranteed to run in every clone.
 
 External pull requests are public proposals by definition. Their authors and
-reviewers must not use them to disclose private configuration. Implementing the
-internal source-promotion mechanism is tracked as
-[`CNIX-0010`](https://github.com/julian-corbet/cnix-corbet-ch/blob/main/TODO.md#cnix-0010--review-source-before-public-promotion).
+reviewers must not use them to disclose private configuration. Until the
+internal source-promotion mechanism is implemented, automation must not push a
+generated candidate directly to the public repository.
 
 ## Lint policy
 

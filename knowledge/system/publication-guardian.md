@@ -113,5 +113,4 @@ original deployment.
 
 Media is denied until the screenshot pipeline can decode and re-encode pixels,
 strip metadata, scan OCR text, compare identifiers, conduct independent visual
-review, and prove itself with seeded canaries. This is tracked as
-[`CNIX-0002`](https://github.com/julian-corbet/cnix-corbet-ch/blob/main/TODO.md#cnix-0002--safe-screenshot-pipeline).
+review, and prove itself with seeded canaries.

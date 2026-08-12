@@ -20,10 +20,11 @@ sources:
 
 Every documented project has two deliberately different public views:
 
-- `nixram.corbet.ch` is a concise, visual landing page. It leads with the
-  problem, promise, demonstration, evidence, and a useful next action.
-- `cnix.corbet.ch/projects/nixram` is the technical reference. It explains what
-  the project is, how it works, how to configure it, and what has been verified.
+- A project's `nix*.corbet.ch` host is a concise, visual landing page. It leads
+  with the problem, promise, demonstration, evidence, and a useful next action.
+- Its `cnix.corbet.ch/projects/{project-id}` page is the technical reference. It
+  explains what the project is, how it works, how to configure it, and what has
+  been verified.
 
 The landing page markets the project; the cnix page documents it. They must not
 become duplicate pages competing for the same search intent or canonical URL.
