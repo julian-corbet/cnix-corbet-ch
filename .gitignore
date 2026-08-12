@@ -5,5 +5,6 @@ quartz/
 .quartz/
 .quartz-cache/
 .wrangler/
+.cnix-release/
 *.tsbuildinfo
 .DS_Store

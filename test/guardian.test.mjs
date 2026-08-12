@@ -32,6 +32,10 @@ test("guardian permits documentation addresses and rejects deployment addresses"
     findSensitiveText(`use ${deploymentAddress}`, "example.md").length,
     1,
   )
+  assert.equal(
+    findSensitiveText("vector path 0 .138.112.25.25h7.5", "icon.js").length,
+    0,
+  )
 })
 
 test("guardian detects private keys", () => {

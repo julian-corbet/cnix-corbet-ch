@@ -130,7 +130,7 @@ export function findSensitiveText(text, relative = "document") {
     }
   }
 
-  const addressExpression = /\b(?:\d{1,3}\.){3}\d{1,3}\b/g
+  const addressExpression = /(?<![\d.])(?:\d{1,3}\.){3}\d{1,3}(?![\d.])/g
   for (const match of text.matchAll(addressExpression)) {
     const address = match[0]
     const valid = address.split(".").every((part) => Number(part) <= 255)

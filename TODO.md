@@ -5,10 +5,12 @@ that needs a dedicated investigation or changes the publication trust boundary.
 
 ## CNIX-0001 — Independent adversarial publication review
 
-- Status: open
+- Status: done
 - Severity: critical
-- Owner: unassigned
-- Evidence: `scripts/guardian.mjs` currently provides deterministic checks only.
+- Owner: agent
+- Evidence: `scripts/release-lib.mjs` gives an isolated read-only reviewer every
+  text-bearing artifact byte and the complete inventory; `scripts/deploy.mjs`
+  verifies its structured verdict and re-hashes before upload.
 - Acceptance: A separately configured strong model reviews the exact candidate
   artifact without write access, attempts to infer private deployment facts,
   returns a machine-readable verdict, and uncertainty blocks publication.

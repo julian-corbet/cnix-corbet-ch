@@ -15,6 +15,7 @@ async function scanSource() {
   const excluded = [
     ".git",
     ".cnix-projection",
+    ".cnix-release",
     ".quartz",
     ".quartz-cache",
     ".wrangler",
@@ -123,16 +124,22 @@ async function scanArtifact(directory) {
       fail(`${file.relative}: artifact contains a symbolic link`)
       continue
     }
-    if (file.relative === "_headers") continue
     if (!allowedExtensions.has(path.extname(file.relative))) {
-      fail(`${file.relative}: unexpected artifact file type`)
-      continue
+      if (file.relative !== "_headers") {
+        fail(`${file.relative}: unexpected artifact file type`)
+        continue
+      }
     }
     if (/\.(?:map|md|yaml|yml)$/i.test(file.relative)) {
       fail(`${file.relative}: source or source map leaked into artifact`)
     }
     const extension = path.extname(file.relative)
-    if ([".html", ".json", ".svg", ".txt", ".xml"].includes(extension)) {
+    if (
+      file.relative === "_headers" ||
+      [".css", ".html", ".js", ".json", ".svg", ".txt", ".xml"].includes(
+        extension,
+      )
+    ) {
       const text = await readFile(file.path, "utf8")
       for (const finding of findSensitiveText(
         text,

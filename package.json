@@ -22,7 +22,7 @@
     "check": "npm run lint && npm test && npm run build",
     "dev": "node scripts/build-site.mjs --serve",
     "format": "prettier . --write",
-    "deploy": "node scripts/deploy-blocked.mjs"
+    "deploy": "node scripts/deploy.mjs"
   },
   "devDependencies": {
     "@jackyzha0/quartz": "https://github.com/jackyzha0/quartz/archive/74b3fc9efd0caafea3dbcd846ddf1f06855b6d2a.tar.gz",

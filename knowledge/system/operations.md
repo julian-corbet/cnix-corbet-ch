@@ -29,10 +29,13 @@ strong-model synthesis with provenance
 code, schema, Markdown, link, and safety lint
         |
         v
+static build and deterministic artifact review
+        |
+        v
 independent adversarial publication review
         |
         v
-static build, artifact review, and deploy
+deploy the unchanged artifact
 ```
 
 Cheap models may enumerate files, extract headings, classify diffs, and prepare
@@ -53,11 +56,16 @@ repository TODO is a bounded handoff surface for unresolved cnix findings.
 
 ## Publication behaviour
 
-The target green path requires no human interaction. Until the independent
-adversarial gate is implemented, cnix can build candidate artifacts but cannot
-deploy them. Once enabled, a failed gate stops before deployment, keeps the
-last-known-good website live, and produces one concise explanation of the
-blocking evidence. The publisher does not attempt a partial release.
+The green path requires no interactive publication decision. `npm run deploy`
+requires a clean Git tree, runs the complete check and build, and asks a
+separately configured strong model for a structured privacy verdict in a
+read-only temporary workspace. The verdict names the complete artifact hash. The
+publisher recomputes that hash immediately before invoking Cloudflare.
+
+A rejection, uncertainty, changed byte, failed check, or provider error stops
+the release and keeps the last-known-good website live. The publisher does not
+attempt a partial release. The local attestation records the source revision,
+reviewer configuration, covered risks, and exact artifact identity.
 
 ## Freshness
 

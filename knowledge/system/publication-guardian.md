@@ -26,11 +26,10 @@ be emitted even when page filters hide notes.[^quartz-private]
 
 [^quartz-private]: Quartz private pages
 
-## Target release path
+## Release path
 
-The release path below is the required end state. Deployment is disabled while
-the independent adversarial gate remains an open critical finding; current CI
-stops after producing a checked candidate artifact.
+CI stops after producing a checked candidate artifact. An authorized maintainer
+can run the complete release path below from a clean source revision.
 
 ```text
 public Markdown and synthetic tutorials
@@ -42,13 +41,16 @@ public Markdown and synthetic tutorials
        clean allowlisted projection
                  |
                  v
+           Quartz build
+                 |
+                 v
+ deterministic artifact checks
+                 |
+                 v
        independent adversarial review
                  |
                  v
-      Quartz build and artifact checks
-                 |
-                 v
-        immutable Cloudflare release
+        unchanged Cloudflare release
 ```
 
 Every gate fails closed. Failure or uncertainty leaves the last-known-good
@@ -79,10 +81,16 @@ model, to inspect the exact candidate artifact and attempt to reconstruct
 private topology, identities, deployment values, or operational facts. It must
 return a structured verdict; uncertainty blocks publication.
 
-That independent reviewer is deliberately recorded as an
-[open critical finding](https://github.com/julian-corbet/cnix-corbet-ch/blob/main/TODO.md#cnix-0001--independent-adversarial-publication-review).
-The current implementation must not claim that deterministic checks alone
-provide the intended assurance.
+The release command invokes a separately configured strong model with a
+read-only sandbox and an isolated temporary working directory. It supplies the
+complete artifact inventory and every text-bearing artifact byte. Binary files
+are represented by their path, byte count, and digest. The structured verdict
+must match the complete artifact hash, state `allow`, report no uncertainty and
+no findings, and cover the required disclosure classes. The publisher hashes the
+artifact again immediately before upload, so the reviewed bytes and deployed
+bytes cannot silently diverge.
+
+This model gate complements deterministic checks; it does not replace them.
 
 ## Tutorials
 

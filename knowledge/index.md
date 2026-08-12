@@ -8,6 +8,12 @@ cnix is the public knowledge layer for a family of Nix projects. It turns
 revision-addressed source evidence into concise explanations, safe tutorials,
 and a website that humans and machines can navigate without proprietary tools.
 
+## Working preview
+
+This site is live while its project catalogue is being populated. The current
+pages document cnix itself, including the knowledge model and publication
+boundary; they are the first end-to-end proof of the system they describe.
+
 ## Start here
 
 - [The cnix system](system/cnix.md) — what the product does and why it exists.

@@ -1,5 +1,12 @@
 # cnix knowledge log
 
+## 2026-08-12 — End-to-end preview release
+
+- Added a hash-bound, structured adversarial privacy review to the release path.
+- Enabled fail-closed Cloudflare publication through `npm run deploy`.
+- Marked the initial site as a working preview while project ingestion remains
+  incomplete.
+
 ## 2026-08-12
 
 - **Initialization**: Defined cnix as the public knowledge and publication
