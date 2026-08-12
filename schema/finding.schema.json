@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cnix.corbet.ch/schema/finding.schema.json",
+  "title": "cnix lint finding",
+  "type": "object",
+  "required": ["id", "title", "status", "severity", "owner", "evidence"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^CNIX-[0-9]{4}$" },
+    "title": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["open", "blocked", "done"] },
+    "severity": { "enum": ["low", "medium", "high", "critical"] },
+    "owner": { "enum": ["agent", "human", "unassigned"] },
+    "evidence": { "type": "string", "minLength": 1 },
+    "acceptance": { "type": "string", "minLength": 1 }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,10 @@
+# Publication boundary and executable policy
+/.github/ @julian-corbet
+/package.json @julian-corbet
+/package-lock.json @julian-corbet
+/quartz.config.yaml @julian-corbet
+/quartz.ts @julian-corbet
+/schema/ @julian-corbet
+/scripts/ @julian-corbet
+/site/ @julian-corbet
+/wrangler.jsonc @julian-corbet

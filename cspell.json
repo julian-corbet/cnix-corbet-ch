@@ -1,0 +1,41 @@
+{
+  "version": "0.2",
+  "language": "en-GB,en-US",
+  "useGitignore": true,
+  "files": ["**/*.{md,mjs,json,yaml,yml,toml}"],
+  "ignorePaths": [
+    "node_modules/**",
+    "public/**",
+    "quartz/**",
+    ".cnix-projection/**",
+    "package-lock.json"
+  ],
+  "words": [
+    "AKIA",
+    "andrej",
+    "apos",
+    "baprs",
+    "bxox",
+    "cnix",
+    "CODEOWNED",
+    "Corbet",
+    "darkgray",
+    "darkmode",
+    "Extensionless",
+    "frontmatter",
+    "GHSA",
+    "inspectable",
+    "jackyzha",
+    "Karpathy",
+    "lightgray",
+    "llms",
+    "nixea",
+    "OpenKnowledge",
+    "qrstuvwxyz",
+    "Quartz",
+    "rgba",
+    "submodule",
+    "wikilinks",
+    "Wrangler"
+  ]
+}

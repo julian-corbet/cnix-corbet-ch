@@ -1,0 +1,36 @@
+{
+  "name": "cnix-corbet-ch",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24",
+    "npm": ">=11"
+  },
+  "scripts": {
+    "prepare-renderer": "node scripts/prepare-renderer.mjs",
+    "project": "node scripts/project-public.mjs",
+    "lint:content": "node scripts/lint-content.mjs",
+    "lint:dependencies": "node scripts/audit-dependencies.mjs",
+    "lint:guardian": "node scripts/guardian.mjs source",
+    "lint:markdown": "markdownlint-cli2",
+    "lint:spelling": "cspell lint --no-progress --show-suggestions",
+    "lint:format": "prettier . --check",
+    "lint": "npm run lint:content && npm run lint:dependencies && npm run lint:guardian && npm run lint:markdown && npm run lint:spelling && npm run lint:format",
+    "test": "node --test test/*.test.mjs",
+    "build": "node scripts/build-site.mjs",
+    "check": "npm run lint && npm test && npm run build",
+    "dev": "node scripts/build-site.mjs --serve",
+    "format": "prettier . --write",
+    "deploy": "node scripts/deploy-blocked.mjs"
+  },
+  "devDependencies": {
+    "@jackyzha0/quartz": "https://github.com/jackyzha0/quartz/archive/74b3fc9efd0caafea3dbcd846ddf1f06855b6d2a.tar.gz",
+    "ajv": "8.20.0",
+    "cspell": "10.0.1",
+    "markdownlint-cli2": "0.23.2",
+    "prettier": "3.9.6",
+    "wrangler": "4.121.0",
+    "yaml": "2.9.0"
+  }
+}

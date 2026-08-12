@@ -1,0 +1,61 @@
+:root {
+  --cnix-line: color-mix(in srgb, var(--secondary) 30%, transparent);
+}
+
+body {
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  letter-spacing: -0.005em;
+}
+
+code,
+pre,
+.page-title a {
+  font-family:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.page-title a {
+  letter-spacing: -0.04em;
+}
+
+.center article > h1:first-child,
+.article-title {
+  letter-spacing: -0.035em;
+}
+
+.center article > p:first-of-type {
+  font-size: 1.08rem;
+  line-height: 1.65;
+}
+
+table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+thead {
+  border-bottom: 2px solid var(--cnix-line);
+}
+
+code {
+  border-radius: 0.3rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

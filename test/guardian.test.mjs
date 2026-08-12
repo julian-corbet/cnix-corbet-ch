@@ -1,0 +1,48 @@
+import assert from "node:assert/strict"
+import test from "node:test"
+import {
+  findSensitiveText,
+  isDocumentationAddress,
+  parseFrontmatter,
+} from "../scripts/lib.mjs"
+
+test("frontmatter parser separates metadata from Markdown", () => {
+  const parsed = parseFrontmatter(
+    "---\ntype: cnix/test\n---\n# Body\n",
+    "fixture.md",
+  )
+  assert.equal(parsed.data.type, "cnix/test")
+  assert.equal(parsed.body, "# Body\n")
+})
+
+test("guardian detects credential-shaped assignments", () => {
+  const candidate = `token = "${"abcdefghijklmnop"}${"qrstuvwxyz123456"}"`
+  const findings = findSensitiveText(candidate, "fixture.txt")
+  assert.equal(findings.length, 1)
+  assert.match(findings[0], /credential assignment/)
+})
+
+test("guardian permits documentation addresses and rejects deployment addresses", () => {
+  const deploymentAddress = [10, 23, 4, 5].join(".")
+  assert.equal(isDocumentationAddress("192.0.2.10"), true)
+  assert.equal(isDocumentationAddress("198.51.100.8"), true)
+  assert.equal(isDocumentationAddress(deploymentAddress), false)
+  assert.equal(findSensitiveText("use 192.0.2.10", "example.md").length, 0)
+  assert.equal(
+    findSensitiveText(`use ${deploymentAddress}`, "example.md").length,
+    1,
+  )
+})
+
+test("guardian detects private keys", () => {
+  const marker = ["-----BEGIN OPENSSH", "PRIVATE KEY-----"].join(" ")
+  const findings = findSensitiveText(marker, "fixture.txt")
+  assert.equal(findings.length, 1)
+})
+
+test("guardian detects high-entropy strings without a credential label", () => {
+  const candidate = ["f9QaZ2vLm7", "P4xNc8RkW1", "tY6uHs3Ed0", "Bg5J"].join("")
+  const findings = findSensitiveText(candidate, "fixture.txt")
+  assert.equal(findings.length, 1)
+  assert.match(findings[0], /high-entropy/)
+})
