@@ -29,6 +29,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_ENABLE_COMMENTS: false
           GITLEAKS_ENABLE_UPLOAD_ARTIFACT: false
+      - name: Remove ephemeral scanner report
+        run: rm -- results.sarif
       - name: Lint, test, and build
         run: npm run check
       - name: Preserve reviewed website artifact
