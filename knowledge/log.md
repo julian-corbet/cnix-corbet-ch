@@ -8,6 +8,8 @@
   incomplete.
 - Defined separate `nix*.corbet.ch` marketing showcases as generated outputs of
   the same reviewed project concepts that produce cnix technical references.
+- Extended the adversarial reviewer's explicit public allowlist only to the
+  project-showcase hostname pattern and its documented product relationship.
 
 ## 2026-08-12
 

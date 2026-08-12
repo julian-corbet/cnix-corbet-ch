@@ -5,8 +5,16 @@ import path from "node:path"
 import test from "node:test"
 import {
   artifactInventory,
+  reviewerPrompt,
   validateAttestation,
 } from "../scripts/release-lib.mjs"
+
+test("reviewer policy narrowly allowlists public showcase hostnames", () => {
+  const prompt = reviewerPrompt('{"artifact_sha256":"test"}')
+  assert.match(prompt, /nix\[a-z0-9-\]\+\.corbet\.ch/)
+  assert.match(prompt, /Do not extend this allowlist/)
+  assert.match(prompt, /<candidate-json>/)
+})
 
 test("artifact inventory is stable and changes with artifact bytes", async () => {
   const directory = await mkdtemp(path.join(tmpdir(), "cnix-release-test-"))

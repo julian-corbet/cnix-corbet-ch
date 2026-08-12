@@ -91,6 +91,13 @@ no findings, and cover the required disclosure classes. The publisher hashes the
 artifact again immediately before upload, so the reviewed bytes and deployed
 bytes cannot silently diverge.
 
+The reviewer's explicit public-identifier allowlist is narrow: `corbet.ch`,
+`cnix.corbet.ch`, the public cnix repository, and project showcase hostnames
+matching `nix[a-z0-9-]+.corbet.ch`. The public relationship between a cnix
+technical reference and its distinct project showcase is also intentional. This
+does not allow other host patterns, real configured values, or
+deployment-specific implementation evidence.
+
 This model gate complements deterministic checks; it does not replace them.
 
 ## Tutorials
