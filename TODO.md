@@ -78,3 +78,17 @@ that needs a dedicated investigation or changes the publication trust boundary.
 - Acceptance: Use a maintained, commit-pinned action or a checksum-pinned
   official CLI scan that covers full history, leaves no report in the source
   tree, and emits no runtime-deprecation warning.
+
+## CNIX-0008 — Generate the complete project showcase cosmos
+
+- Status: open
+- Severity: high
+- Owner: agent
+- Evidence: Existing `nix*.corbet.ch` pages and family navigation are copied by
+  hand, while most active public Corbet Nix projects have no advertised
+  homepage. That structure has already drifted and cannot scale with the suite.
+- Acceptance: Every allowlisted active public Corbet Nix project has a validated
+  project concept and distinct generated landing hostname; one host-aware
+  publisher emits local assets, canonical SEO and LLM discovery files, related
+  project and portfolio links, and reconciled `/docs` redirects, with every
+  artifact passing the cnix publication guardian.

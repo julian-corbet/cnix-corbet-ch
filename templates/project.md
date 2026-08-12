@@ -7,6 +7,12 @@ resource: https://github.com/OWNER/REPOSITORY
 tags: [nix, corbet-nix]
 status: draft
 stale_after: YYYY-MM-DD
+showcase:
+  hostname: PROJECT_ID.corbet.ch
+  tagline: SHORT_PUBLIC_PROMISE
+  audience: WHO_THIS_HELPS
+  accent: "#0f766e"
+  related_projects: []
 generated:
   by: human:maintainer
   at: YYYY-MM-DDT00:00:00Z

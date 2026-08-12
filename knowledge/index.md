@@ -21,6 +21,8 @@ boundary; they are the first end-to-end proof of the system they describe.
   the private overlay.
 - [Publication guardian](system/publication-guardian.md) — why publication is a
   security decision rather than a rendering option.
+- [Project showcases](system/project-showcases.md) — how each project gets a
+  distinct marketing site without duplicating technical facts.
 - [Interoperability](system/interoperability.md) — how cnix plays with OKF, LLM
   Wiki, Obsidian, Quartz, and future nixea views.
 - [Operations](system/operations.md) — the unattended maintenance loop and
@@ -29,7 +31,8 @@ boundary; they are the first end-to-end proof of the system they describe.
 ## Projects
 
 - [Project index](projects/) — concise public explanations of the Corbet Nix
-  suite. The catalogue is being populated from revision-addressed repositories.
+  suite and the route into its individual showcases. The catalogue is being
+  populated from revision-addressed repositories.
 
 ## Change history
 

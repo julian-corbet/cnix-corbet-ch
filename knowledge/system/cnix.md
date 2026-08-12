@@ -54,13 +54,16 @@ declared architecture or become a ticket database.
 
 ## What success looks like
 
-A person can understand a project from one concise page. An agent can discover
-the same corpus through indexes, structured frontmatter, standard links, raw
-Markdown, JSON, RSS, a sitemap, and `llms.txt`. A failed or uncertain safety
-check publishes nothing and leaves the last-known-good site online.
+A person can understand a project from one concise technical page, then meet it
+through a distinct showcase designed for discovery and adoption. Both are
+compiled from one reviewed project concept. An agent can discover the same
+corpus through indexes, structured frontmatter, standard links, raw Markdown,
+JSON, RSS, a sitemap, and `llms.txt`. A failed or uncertain safety check
+publishes nothing and leaves the last-known-good site online.
 
 ## Related
 
 - [Knowledge model](knowledge-model.md)
+- [Project showcases](project-showcases.md)
 - [Publication guardian](publication-guardian.md)
 - [Operations](operations.md)

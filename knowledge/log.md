@@ -6,6 +6,8 @@
 - Enabled fail-closed static publication through `npm run deploy`.
 - Marked the initial site as a working preview while project ingestion remains
   incomplete.
+- Defined separate `nix*.corbet.ch` marketing showcases as generated outputs of
+  the same reviewed project concepts that produce cnix technical references.
 
 ## 2026-08-12
 

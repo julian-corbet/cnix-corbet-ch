@@ -64,6 +64,16 @@ function lintProject(relative, data, body) {
     fail(`${relative}: project schema: ${formatAjv(validateProject.errors)}`)
   }
 
+  const expectedHostname = `${data.cnix_id}.corbet.ch`
+  if (data.showcase?.hostname !== expectedHostname) {
+    fail(
+      `${relative}: showcase hostname must match cnix_id (${expectedHostname})`,
+    )
+  }
+  if (data.showcase?.related_projects?.includes(data.cnix_id)) {
+    fail(`${relative}: a showcase cannot relate a project to itself`)
+  }
+
   const required = [
     "Summary",
     "What it is",
