@@ -43,7 +43,33 @@ await run("npm", ["run", "check"])
 const revision = (
   await run("git", ["rev-parse", "HEAD"], { capture: true })
 ).trim()
-const { attestation, inventory } = await reviewArtifact(artifact)
+let review
+try {
+  review = await reviewArtifact(artifact)
+} catch (error) {
+  if (error.attestation) {
+    await mkdir(releaseDirectory, { recursive: true })
+    await writeFile(
+      path.join(releaseDirectory, "last-rejection.json"),
+      `${JSON.stringify(
+        {
+          ...error.attestation,
+          git_revision: revision,
+          reviewer_model: process.env.CNIX_REVIEW_MODEL ?? "gpt-5.5",
+          reviewer_effort: process.env.CNIX_REVIEW_EFFORT ?? "xhigh",
+        },
+        null,
+        2,
+      )}\n`,
+      { mode: 0o600 },
+    )
+    console.error(
+      "Publication rejected; evidence preserved in .cnix-release/last-rejection.json",
+    )
+  }
+  throw error
+}
+const { attestation, inventory } = review
 const beforeUpload = await artifactInventory(artifact)
 if (beforeUpload.sha256 !== inventory.sha256) {
   throw new Error("Artifact changed after adversarial review")

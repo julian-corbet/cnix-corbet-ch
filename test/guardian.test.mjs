@@ -1,6 +1,7 @@
 import assert from "node:assert/strict"
 import test from "node:test"
 import {
+  findExternalExecutableUrls,
   findSensitiveText,
   isDocumentationAddress,
   parseFrontmatter,
@@ -49,4 +50,21 @@ test("guardian detects high-entropy strings without a credential label", () => {
   const findings = findSensitiveText(candidate, "fixture.txt")
   assert.equal(findings.length, 1)
   assert.match(findings[0], /high-entropy/)
+})
+
+test("guardian rejects executable third-party URLs and permits XML namespaces", () => {
+  assert.equal(
+    findExternalExecutableUrls(
+      'import("https://cdn.example.test/library.js")',
+      "bundle.js",
+    ).length,
+    1,
+  )
+  assert.equal(
+    findExternalExecutableUrls(
+      'createElementNS("http://www.w3.org/2000/svg", "svg")',
+      "bundle.js",
+    ).length,
+    0,
+  )
 })

@@ -1,7 +1,12 @@
 import { readFile } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
-import { findSensitiveText, sha256, walkFiles } from "./lib.mjs"
+import {
+  findExternalExecutableUrls,
+  findSensitiveText,
+  sha256,
+  walkFiles,
+} from "./lib.mjs"
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const mode = process.argv[2] ?? "source"
@@ -146,6 +151,13 @@ async function scanArtifact(directory) {
         `artifact/${file.relative}`,
       ))
         fail(finding)
+      if ([".css", ".js"].includes(extension)) {
+        for (const finding of findExternalExecutableUrls(
+          text,
+          `artifact/${file.relative}`,
+        ))
+          fail(finding)
+      }
     }
   }
 

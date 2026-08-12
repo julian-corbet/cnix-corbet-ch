@@ -61,7 +61,7 @@ independently cloneable and buildable.
 ## Website and machine views
 
 Quartz turns the clean projection into semantic static HTML with search,
-backlinks, graph navigation, RSS, and a sitemap. cnix additionally emits raw
+backlinks, indexed navigation, RSS, and a sitemap. cnix additionally emits raw
 machine indexes. Traditional SEO and generative-engine discoverability use the
 same foundation: direct answers, stable URLs and headings, text-visible claims,
 public evidence, current verification dates, and honest limits.

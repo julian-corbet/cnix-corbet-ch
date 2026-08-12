@@ -142,6 +142,17 @@ export function findSensitiveText(text, relative = "document") {
   return findings
 }
 
+export function findExternalExecutableUrls(text, relative = "document") {
+  const findings = []
+  const expression = /https?:\/\/[^\s"'`)<]+/g
+  for (const match of text.matchAll(expression)) {
+    const url = match[0].replace(/\\+$/, "")
+    if (/^http:\/\/www\.w3\.org\/(?:1998|1999|2000)\//.test(url)) continue
+    findings.push(`${relative}: external executable URL ${url}`)
+  }
+  return findings
+}
+
 export async function readUtf8(file) {
   return readFile(file, "utf8")
 }

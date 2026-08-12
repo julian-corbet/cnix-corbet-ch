@@ -3,7 +3,7 @@
 ## 2026-08-12 — End-to-end preview release
 
 - Added a hash-bound, structured adversarial privacy review to the release path.
-- Enabled fail-closed Cloudflare publication through `npm run deploy`.
+- Enabled fail-closed static publication through `npm run deploy`.
 - Marked the initial site as a working preview while project ingestion remains
   incomplete.
 
@@ -14,6 +14,6 @@
 - **Architecture**: Separated the public corpus from the private operational
   overlay and made tutorials synthetic public concepts.
 - **Safety**: Established an allowlisted projection and fail-closed guardian as
-  prerequisites for Quartz and Cloudflare publication.
+  prerequisites for rendering and publication.
 - **Interoperability**: Declared Open Knowledge Format 0.2 and LLM Wiki
   conventions as compatibility targets.

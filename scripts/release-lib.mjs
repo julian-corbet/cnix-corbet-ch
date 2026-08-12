@@ -213,7 +213,13 @@ ${candidate}
 
     await runReviewer(temporary, prompt, outputPath)
     const attestation = JSON.parse(await readFile(outputPath, "utf8"))
-    validateAttestation(attestation, inventory.sha256)
+    try {
+      validateAttestation(attestation, inventory.sha256)
+    } catch (error) {
+      error.attestation = attestation
+      error.artifactSha256 = inventory.sha256
+      throw error
+    }
     return { attestation, inventory }
   } finally {
     await rm(temporary, { recursive: true, force: true })

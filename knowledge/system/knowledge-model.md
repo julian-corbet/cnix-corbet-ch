@@ -78,5 +78,5 @@ state, and public work remains in GitHub issues and pull requests.
 ## Projections
 
 Markdown and YAML frontmatter are canonical. HTML, search indexes, JSON, RSS,
-sitemaps, graphs, and `llms.txt` are disposable projections. Deleting and
+sitemaps, navigation, and `llms.txt` are disposable projections. Deleting and
 rebuilding them must never lose knowledge.

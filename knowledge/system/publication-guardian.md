@@ -50,7 +50,7 @@ public Markdown and synthetic tutorials
        independent adversarial review
                  |
                  v
-        unchanged Cloudflare release
+         unchanged static release
 ```
 
 Every gate fails closed. Failure or uncertainty leaves the last-known-good
@@ -67,6 +67,7 @@ The implemented guardian rejects:
 - credential-like assignments, private keys, token formats, local filesystem
   paths, non-documentation IP addresses, and suspicious high-entropy values;
 - non-synthetic configuration examples;
+- external executable resource URLs in generated scripts or styles;
 - generated files that do not correspond to the approved projection; and
 - source maps, unexpected artifacts, or forbidden strings in built output.
 

@@ -60,7 +60,7 @@ The green path requires no interactive publication decision. `npm run deploy`
 requires a clean Git tree, runs the complete check and build, and asks a
 separately configured strong model for a structured privacy verdict in a
 read-only temporary workspace. The verdict names the complete artifact hash. The
-publisher recomputes that hash immediately before invoking Cloudflare.
+publisher recomputes that hash immediately before invoking the hosting provider.
 
 A rejection, uncertainty, changed byte, failed check, or provider error stops
 the release and keeps the last-known-good website live. The publisher does not
