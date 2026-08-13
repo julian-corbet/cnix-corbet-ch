@@ -12,6 +12,24 @@ showcase:
   tagline: SHORT_PUBLIC_PROMISE
   audience: WHO_THIS_HELPS
   accent: "#0f766e"
+  publish: false
+  composition: signal
+  problem: THE_PUBLIC_PROBLEM_THIS_PROJECT_ADDRESSES
+  demonstration:
+    - title: FIRST_STAGE
+      description: EVIDENCE_BOUND_DESCRIPTION
+    - title: SECOND_STAGE
+      description: EVIDENCE_BOUND_DESCRIPTION
+    - title: THIRD_STAGE
+      description: EVIDENCE_BOUND_DESCRIPTION
+  highlights:
+    - title: FIRST_HIGHLIGHT
+      description: EVIDENCE_BOUND_DESCRIPTION
+    - title: SECOND_HIGHLIGHT
+      description: EVIDENCE_BOUND_DESCRIPTION
+    - title: THIRD_HIGHLIGHT
+      description: EVIDENCE_BOUND_DESCRIPTION
+  evidence: CONCISE_PUBLIC_EVIDENCE_AND_LIMITS
   related_projects: []
 generated:
   by: human:maintainer

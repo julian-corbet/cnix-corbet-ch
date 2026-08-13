@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url"
 import {
   findExternalExecutableUrls,
   findSensitiveText,
+  isAllowedArtifactPath,
   sha256,
   walkFiles,
 } from "./lib.mjs"
@@ -76,7 +77,7 @@ async function scanSource() {
         fail(finding)
     }
     if (
-      /\b(?:infra-corbet-ch|private\/|how it is configured)\b/i.test(text) &&
+      /(?:\bprivate\/|\bhow it is configured\b)/i.test(text) &&
       file.relative.startsWith("knowledge/projects/")
     ) {
       fail(
@@ -96,29 +97,22 @@ async function scanArtifact(directory) {
   const artifact = path.resolve(root, directory)
   const projection = path.resolve(root, process.argv[4] ?? ".cnix-projection")
   const files = await walkFiles(artifact)
-  const allowedExtensions = new Set([
-    ".css",
-    ".html",
-    ".ico",
-    ".js",
-    ".json",
-    ".svg",
-    ".txt",
-    ".webp",
-    ".woff2",
-    ".xml",
-  ])
   const required = new Set([
-    "_headers",
-    "icon.svg",
-    "index.html",
-    "index.xml",
-    "knowledge.json",
-    "llms.txt",
-    "projection-manifest.json",
-    "robots.txt",
-    "sitemap.xml",
-    "static/contentIndex.json",
+    "assets/_headers",
+    "assets/sites/cnix/icon.svg",
+    "assets/sites/cnix/index.html",
+    "assets/sites/cnix/index.xml",
+    "assets/sites/cnix/knowledge.json",
+    "assets/sites/cnix/llms.txt",
+    "assets/sites/cnix/projection-manifest.json",
+    "assets/sites/cnix/robots.txt",
+    "assets/sites/cnix/sitemap.xml",
+    "assets/sites/cnix/static/contentIndex.json",
+    "site-manifest.json",
+    "worker/index.mjs",
+    "worker/router.mjs",
+    "worker/sites.mjs",
+    "wrangler.json",
   ])
   const observed = new Set(files.map((file) => file.relative))
   for (const needed of required)
@@ -129,21 +123,26 @@ async function scanArtifact(directory) {
       fail(`${file.relative}: artifact contains a symbolic link`)
       continue
     }
-    if (!allowedExtensions.has(path.extname(file.relative))) {
-      if (file.relative !== "_headers") {
-        fail(`${file.relative}: unexpected artifact file type`)
-        continue
-      }
+    if (!isAllowedArtifactPath(file.relative)) {
+      fail(`${file.relative}: unexpected artifact file type`)
+      continue
     }
     if (/\.(?:map|md|yaml|yml)$/i.test(file.relative)) {
       fail(`${file.relative}: source or source map leaked into artifact`)
     }
     const extension = path.extname(file.relative)
     if (
-      file.relative === "_headers" ||
-      [".css", ".html", ".js", ".json", ".svg", ".txt", ".xml"].includes(
-        extension,
-      )
+      file.relative === "assets/_headers" ||
+      [
+        ".css",
+        ".html",
+        ".js",
+        ".json",
+        ".mjs",
+        ".svg",
+        ".txt",
+        ".xml",
+      ].includes(extension)
     ) {
       const text = await readFile(file.path, "utf8")
       for (const finding of findSensitiveText(
@@ -161,9 +160,159 @@ async function scanArtifact(directory) {
     }
   }
 
-  if (observed.has("projection-manifest.json")) {
+  let siteManifest = null
+  if (observed.has("site-manifest.json")) {
+    siteManifest = JSON.parse(
+      await readFile(path.join(artifact, "site-manifest.json"), "utf8"),
+    )
+    if (
+      siteManifest.schema_version !== 1 ||
+      !Array.isArray(siteManifest.sites) ||
+      siteManifest.sites.length === 0
+    ) {
+      fail("site manifest has an unknown schema or no sites")
+      siteManifest = null
+    }
+  }
+
+  const sites = siteManifest?.sites ?? []
+  const hostnames = new Set()
+  const assetKeys = new Set()
+  for (const site of sites) {
+    if (
+      typeof site.hostname !== "string" ||
+      typeof site.asset_key !== "string" ||
+      typeof site.publish !== "boolean" ||
+      !["knowledge", "showcase"].includes(site.kind)
+    ) {
+      fail("site manifest contains an invalid site entry")
+      continue
+    }
+    if (hostnames.has(site.hostname))
+      fail(`site manifest repeats hostname ${site.hostname}`)
+    if (assetKeys.has(site.asset_key))
+      fail(`site manifest repeats asset key ${site.asset_key}`)
+    hostnames.add(site.hostname)
+    assetKeys.add(site.asset_key)
+
+    if (site.kind === "knowledge") {
+      if (
+        site.hostname !== "cnix.corbet.ch" ||
+        site.asset_key !== "cnix" ||
+        site.publish !== true ||
+        site.cnix_id !== undefined
+      ) {
+        fail("site manifest contains an invalid cnix knowledge host")
+      }
+    } else if (
+      !/^nix[a-z0-9-]+$/.test(site.cnix_id ?? "") ||
+      site.asset_key !== site.cnix_id ||
+      site.hostname !== `${site.cnix_id}.corbet.ch`
+    ) {
+      fail(`site manifest contains an invalid showcase host ${site.hostname}`)
+    }
+  }
+  if (!hostnames.has("cnix.corbet.ch"))
+    fail("site manifest omits cnix.corbet.ch")
+
+  const publishedHostnames = new Set(
+    sites.filter((site) => site.publish).map((site) => site.hostname),
+  )
+
+  for (const file of files.filter((candidate) =>
+    candidate.relative.startsWith("assets/"),
+  )) {
+    if (file.relative === "assets/_headers") continue
+    if (!file.relative.startsWith("assets/sites/")) {
+      fail(`${file.relative}: artifact contains an unlisted asset root`)
+      continue
+    }
+    const assetKey = file.relative.split("/")[2]
+    if (!assetKeys.has(assetKey)) {
+      fail(`${file.relative}: artifact contains an unlisted site directory`)
+    }
+  }
+
+  const showcaseRequired = [
+    "404.html",
+    "icon.svg",
+    "index.html",
+    "llms.txt",
+    "project.json",
+    "robots.txt",
+    "sitemap.xml",
+    "style.css",
+  ]
+  for (const site of sites.filter(
+    (candidate) => candidate.kind === "showcase",
+  )) {
+    for (const relative of showcaseRequired) {
+      const expected = `assets/sites/${site.asset_key}/${relative}`
+      if (!observed.has(expected)) fail(`artifact: missing ${expected}`)
+    }
+  }
+
+  if (observed.has("wrangler.json")) {
+    const wrangler = JSON.parse(
+      await readFile(path.join(artifact, "wrangler.json"), "utf8"),
+    )
+    if (
+      wrangler.main !== "./worker/index.mjs" ||
+      wrangler.assets?.directory !== "./assets" ||
+      wrangler.assets?.binding !== "ASSETS" ||
+      wrangler.assets?.run_worker_first !== true
+    ) {
+      fail("release Wrangler config does not bind the reviewed host router")
+    }
+    const routeHostnames = new Set()
+    for (const route of wrangler.routes ?? []) {
+      if (route.custom_domain !== true || typeof route.pattern !== "string") {
+        fail("release Wrangler config contains a non-custom-domain route")
+        continue
+      }
+      routeHostnames.add(route.pattern)
+    }
+    if (
+      routeHostnames.size !== publishedHostnames.size ||
+      [...publishedHostnames].some((hostname) => !routeHostnames.has(hostname))
+    ) {
+      fail("release Wrangler routes do not exactly match the site manifest")
+    }
+  }
+
+  if (observed.has("worker/sites.mjs")) {
+    const module = await readFile(
+      path.join(artifact, "worker", "sites.mjs"),
+      "utf8",
+    )
+    const encoded = module.match(/^export default ([\s\S]+)\n$/)?.[1]
+    let workerSites = null
+    try {
+      workerSites = JSON.parse(encoded)
+    } catch {
+      fail("worker site map is not deterministic JSON")
+    }
+    const expected = Object.fromEntries(
+      sites
+        .filter((site) => site.publish)
+        .map((site) => [
+          site.hostname,
+          {
+            kind: site.kind,
+            asset_key: site.asset_key,
+            ...(site.cnix_id ? { cnix_id: site.cnix_id } : {}),
+          },
+        ]),
+    )
+    if (JSON.stringify(workerSites) !== JSON.stringify(expected)) {
+      fail("worker site map does not exactly match the site manifest")
+    }
+  }
+
+  const projectionManifestPath = "assets/sites/cnix/projection-manifest.json"
+  if (observed.has(projectionManifestPath)) {
     const manifest = JSON.parse(
-      await readFile(path.join(artifact, "projection-manifest.json"), "utf8"),
+      await readFile(path.join(artifact, projectionManifestPath), "utf8"),
     )
     if (
       manifest.schema_version !== 1 ||
@@ -211,8 +360,9 @@ async function scanArtifact(directory) {
     }
   }
 
-  const index = observed.has("index.html")
-    ? await readFile(path.join(artifact, "index.html"), "utf8")
+  const cnixIndexPath = "assets/sites/cnix/index.html"
+  const index = observed.has(cnixIndexPath)
+    ? await readFile(path.join(artifact, cnixIndexPath), "utf8")
     : ""
   if (!index.includes('type="application/ld+json"'))
     fail("artifact: homepage lacks JSON-LD")
@@ -227,10 +377,24 @@ async function scanArtifact(directory) {
     if (/<title>(?:Untitled|index|log)\b/i.test(html)) {
       fail(`${file.relative}: page has a placeholder title`)
     }
-    if (
-      !/<link rel="canonical" href="https:\/\/cnix\.corbet\.ch\//.test(html)
-    ) {
+    const site = sites.find((candidate) =>
+      file.relative.startsWith(`assets/sites/${candidate.asset_key}/`),
+    )
+    const canonical = html.match(/<link rel="canonical" href="([^"]+)"/)?.[1]
+    if (!site || !canonical)
       fail(`${file.relative}: page lacks a canonical URL`)
+    else {
+      let hostname = ""
+      try {
+        hostname = new URL(canonical).hostname
+      } catch {
+        fail(`${file.relative}: page has an invalid canonical URL`)
+      }
+      if (hostname && hostname !== site.hostname) {
+        fail(
+          `${file.relative}: canonical URL belongs to ${hostname}, not ${site.hostname}`,
+        )
+      }
     }
     if (
       /<script\b[^>]*src="https?:\/\//i.test(html) ||
@@ -253,7 +417,9 @@ async function scanArtifact(directory) {
       fail(`${file.relative}: expected one h1, found ${topLevelHeadings}`)
     }
   }
-  if (files.some((file) => file.relative.startsWith("tags/"))) {
+  if (
+    files.some((file) => file.relative.startsWith("assets/sites/cnix/tags/"))
+  ) {
     fail("artifact: thin generated tag pages are forbidden")
   }
 }

@@ -2,11 +2,16 @@ import { spawn } from "node:child_process"
 import { mkdir, writeFile } from "node:fs/promises"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
-import { artifactInventory, reviewArtifact } from "./release-lib.mjs"
+import {
+  artifactInventory,
+  reviewerConfiguration,
+  reviewArtifact,
+} from "./release-lib.mjs"
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const artifact = path.join(root, "public")
 const releaseDirectory = path.join(root, ".cnix-release")
+const reviewer = reviewerConfiguration()
 
 function run(command, arguments_, options = {}) {
   return new Promise((resolve, reject) => {
@@ -55,8 +60,8 @@ try {
         {
           ...error.attestation,
           git_revision: revision,
-          reviewer_model: process.env.CNIX_REVIEW_MODEL ?? "gpt-5.5",
-          reviewer_effort: process.env.CNIX_REVIEW_EFFORT ?? "xhigh",
+          reviewer_model: reviewer.model,
+          reviewer_effort: reviewer.effort,
         },
         null,
         2,
@@ -82,8 +87,8 @@ await writeFile(
     {
       ...attestation,
       git_revision: revision,
-      reviewer_model: process.env.CNIX_REVIEW_MODEL ?? "gpt-5.5",
-      reviewer_effort: process.env.CNIX_REVIEW_EFFORT ?? "xhigh",
+      reviewer_model: reviewer.model,
+      reviewer_effort: reviewer.effort,
     },
     null,
     2,
@@ -92,4 +97,11 @@ await writeFile(
 )
 
 console.log(`Adversarial reviewer accepted artifact ${inventory.sha256}`)
-await run("npm", ["exec", "--", "wrangler", "deploy"])
+await run("npm", [
+  "exec",
+  "--",
+  "wrangler",
+  "deploy",
+  "--config",
+  "public/wrangler.json",
+])

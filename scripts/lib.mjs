@@ -5,6 +5,24 @@ import YAML from "yaml"
 
 export const POSIX = (value) => value.split(path.sep).join("/")
 
+const artifactTextExtensions = new Set([
+  ".css",
+  ".html",
+  ".js",
+  ".json",
+  ".mjs",
+  ".svg",
+  ".txt",
+  ".xml",
+])
+
+export function isAllowedArtifactPath(relative) {
+  return (
+    path.basename(relative) === "_headers" ||
+    artifactTextExtensions.has(path.extname(relative))
+  )
+}
+
 export async function walkFiles(root, options = {}) {
   const excluded = new Set(options.exclude ?? [])
   const files = []

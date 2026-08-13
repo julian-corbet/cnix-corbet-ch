@@ -25,8 +25,23 @@ function project(overrides = {}) {
       tagline: "A concise public promise",
       audience: "People evaluating a synthetic Nix project",
       accent: "#0f766e",
+      publish: false,
+      composition: "signal",
+      problem: "A synthetic problem for schema validation.",
+      demonstration: [
+        { title: "Declare", description: "Describe an intended state." },
+        { title: "Build", description: "Produce a checked result." },
+        { title: "Inspect", description: "Review the resulting evidence." },
+      ],
+      highlights: [
+        { title: "Portable", description: "Uses a portable test fixture." },
+        { title: "Reviewable", description: "Keeps evidence inspectable." },
+        { title: "Bounded", description: "Makes test limits explicit." },
+      ],
+      evidence: "The schema test validates this synthetic contract.",
       related_projects: [],
     },
+    resource: "https://example.org/project",
     sources: [{ resource: "https://example.org/source" }],
     ...overrides,
   }

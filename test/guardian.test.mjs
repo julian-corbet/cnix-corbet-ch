@@ -3,9 +3,18 @@ import test from "node:test"
 import {
   findExternalExecutableUrls,
   findSensitiveText,
+  isAllowedArtifactPath,
   isDocumentationAddress,
   parseFrontmatter,
 } from "../scripts/lib.mjs"
+
+test("artifact boundary permits only semantically reviewable files", () => {
+  assert.equal(isAllowedArtifactPath("assets/_headers"), true)
+  assert.equal(isAllowedArtifactPath("assets/index.html"), true)
+  assert.equal(isAllowedArtifactPath("assets/icon.svg"), true)
+  assert.equal(isAllowedArtifactPath("assets/font.woff2"), false)
+  assert.equal(isAllowedArtifactPath("assets/image.webp"), false)
+})
 
 test("frontmatter parser separates metadata from Markdown", () => {
   const parsed = parseFrontmatter(

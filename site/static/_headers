@@ -10,6 +10,3 @@
 
 /*.js
   Cache-Control: public, max-age=31556952, immutable
-
-/*.woff2
-  Cache-Control: public, max-age=31556952, immutable

@@ -23,21 +23,27 @@
     "darkmode",
     "Extensionless",
     "frontmatter",
+    "Fira",
     "GHSA",
     "inspectable",
     "jackyzha",
     "Karpathy",
     "lightgray",
     "llms",
+    "nixfixture",
     "nixea",
     "nixram",
+    "nixstaged",
+    "nosniff",
     "OpenKnowledge",
     "qrstuvwxyz",
     "Quartz",
     "rgba",
+    "Segoe",
     "submodule",
     "wikilinks",
+    "wordmark",
     "Wrangler",
-    "xhigh"
+    "labelledby"
   ]
 }

@@ -8,6 +8,7 @@
     "title",
     "description",
     "cnix_id",
+    "resource",
     "status",
     "showcase",
     "sources"
@@ -29,7 +30,18 @@
     "status": { "enum": ["draft", "stable", "deprecated"] },
     "showcase": {
       "type": "object",
-      "required": ["hostname", "tagline", "audience", "accent"],
+      "required": [
+        "hostname",
+        "tagline",
+        "audience",
+        "accent",
+        "publish",
+        "composition",
+        "problem",
+        "demonstration",
+        "highlights",
+        "evidence"
+      ],
       "properties": {
         "hostname": {
           "type": "string",
@@ -40,6 +52,28 @@
         "accent": {
           "type": "string",
           "pattern": "^#[0-9a-fA-F]{6}$"
+        },
+        "publish": { "type": "boolean" },
+        "composition": {
+          "enum": ["signal", "system", "workbench"]
+        },
+        "problem": { "type": "string", "minLength": 1, "maxLength": 320 },
+        "demonstration": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": { "$ref": "#/$defs/showcaseStatement" }
+        },
+        "highlights": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 9,
+          "items": { "$ref": "#/$defs/showcaseStatement" }
+        },
+        "evidence": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 360
         },
         "related_projects": {
           "type": "array",
@@ -108,6 +142,19 @@
     }
   },
   "$defs": {
+    "showcaseStatement": {
+      "type": "object",
+      "required": ["title", "description"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        }
+      },
+      "additionalProperties": false
+    },
     "verification": {
       "type": "object",
       "required": ["by", "at"],

@@ -5,9 +5,40 @@ import path from "node:path"
 import test from "node:test"
 import {
   artifactInventory,
+  isTextArtifactPath,
+  reviewArtifact,
+  reviewerConfiguration,
   reviewerPrompt,
   validateAttestation,
 } from "../scripts/release-lib.mjs"
+
+test("all release headers reach the semantic reviewer", () => {
+  assert.equal(isTextArtifactPath("_headers"), true)
+  assert.equal(isTextArtifactPath("assets/_headers"), true)
+  assert.equal(isTextArtifactPath("assets/sites/cnix/index.html"), true)
+  assert.equal(isTextArtifactPath("assets/icon.webp"), false)
+})
+
+test("artifact review rejects non-text bytes before invoking a reviewer", async () => {
+  const directory = await mkdtemp(path.join(tmpdir(), "cnix-binary-test-"))
+  try {
+    await writeFile(path.join(directory, "image.webp"), Buffer.from([0, 1, 2]))
+    await assert.rejects(reviewArtifact(directory), /non-text review surfaces/)
+  } finally {
+    await rm(directory, { recursive: true, force: true })
+  }
+})
+
+test("artifact review has no silent reviewer default", () => {
+  assert.throws(() => reviewerConfiguration({}), /Set CNIX_REVIEW_MODEL/)
+  assert.deepEqual(
+    reviewerConfiguration({
+      CNIX_REVIEW_MODEL: "reviewer",
+      CNIX_REVIEW_EFFORT: "configured",
+    }),
+    { model: "reviewer", effort: "configured" },
+  )
+})
 
 test("reviewer policy narrowly allowlists public showcase hostnames", () => {
   const prompt = reviewerPrompt('{"artifact_sha256":"test"}')

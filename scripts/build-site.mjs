@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url"
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..")
 const projection = await mkdtemp(path.join(tmpdir(), "cnix-public-projection-"))
+const cnixArtifact = await mkdtemp(path.join(tmpdir(), "cnix-site-artifact-"))
 const serve = process.argv.includes("--serve")
 
 function run(script, args = []) {
@@ -30,14 +31,16 @@ try {
     "--directory",
     projection,
     "--output",
-    "public",
+    serve ? "public" : cnixArtifact,
   ]
   if (serve) buildArguments.push("--serve")
   await run("quartz/bootstrap-cli.mjs", buildArguments)
   if (!serve) {
-    await run("scripts/enrich-artifact.mjs", ["public"])
+    await run("scripts/enrich-artifact.mjs", [cnixArtifact])
+    await run("scripts/build-showcases.mjs", [cnixArtifact, "public"])
     await run("scripts/guardian.mjs", ["artifact", "public", projection])
   }
 } finally {
   await rm(projection, { recursive: true, force: true })
+  await rm(cnixArtifact, { recursive: true, force: true })
 }

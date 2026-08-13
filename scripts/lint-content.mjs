@@ -120,6 +120,9 @@ function lintProject(relative, data, body) {
       )
     }
   }
+  if (!/^https:\/\//.test(data.resource)) {
+    fail(`${relative}: public project resource must use a followable HTTPS URL`)
+  }
 }
 
 function lintTodos(markdown) {
