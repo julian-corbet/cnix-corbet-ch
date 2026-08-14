@@ -201,6 +201,25 @@ hostname pattern, an actual private value, provider account detail, credential,
 private source path, or real deployed configuration merely because it is
 mentioned near an allowed identifier.
 
+The first public project reference is nixram. Its public repository is
+julian-corbet/nixram-corbet-ch, and revision-addressed links into that public
+repository are allowed. The terms NixOS, zram, zswap, systemd-oomd, sysctl,
+sysctls, system-manager, and Home Manager are public project vocabulary. This
+does not allow real host details, a deployment's RAM or selected level, private
+configuration, or any other repository-owner relationship.
+
+The first public project landing site is nixram.corbet.ch. The artifact's
+wrangler.json, worker code, and site-manifest.json form its public,
+machine-readable release contract. They may declare only cnix.corbet.ch and
+nixram.corbet.ch as active custom-domain routes; relative asset paths; the
+logical ASSETS binding; workers_dev false; the request-routing and not-found
+behaviour required by this publisher; and publish true for those two routed
+sites. These exact values and their correlation are the user-authorised public
+launch, not private rollout state. Deny a false publish entry, a showcase
+bundled without a route, any other project route, or any account or
+zone identifier, credential, provider-internal value, private host, network
+address, or unrelated deployment topology.
+
 Return the required JSON attestation. Copy artifact_sha256 exactly from the
 candidate. Use verdict "deny" for a disclosure, "uncertain" whenever you
 cannot establish safety, and "allow" only with uncertainty false and no

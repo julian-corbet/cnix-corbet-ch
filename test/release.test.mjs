@@ -64,6 +64,13 @@ test("reviewer policy narrowly allowlists public showcase hostnames", () => {
   assert.match(prompt, /product name nixea/)
   assert.match(prompt, /npm\s+command names/)
   assert.match(prompt, /literal prefix \/nix\/store/)
+  assert.match(prompt, /julian-corbet\/nixram-corbet-ch/)
+  assert.match(
+    prompt,
+    /first public project landing site is nixram\.corbet\.ch/,
+  )
+  assert.match(prompt, /Deny a false publish entry/)
+  assert.match(prompt, /logical ASSETS binding/)
   assert.match(prompt, /Do not extend this allowlist/)
   assert.match(prompt, /<candidate-json>/)
 })

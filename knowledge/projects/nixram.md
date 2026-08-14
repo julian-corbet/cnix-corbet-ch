@@ -18,7 +18,7 @@ showcase:
     "Platform teams and experienced FOSS engineers evaluating declarative memory
     policy for Nix-managed Linux systems."
   accent: "#0f766e"
-  publish: false
+  publish: true
   composition: system
   problem:
     "Swap, out-of-memory policy, and kernel memory settings are often maintained
