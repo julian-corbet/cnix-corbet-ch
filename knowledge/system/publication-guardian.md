@@ -83,13 +83,19 @@ private topology, identities, deployment values, or operational facts. It must
 return a structured verdict; uncertainty blocks publication.
 
 The release command invokes a separately configured strong model with a
-read-only sandbox and an isolated temporary working directory. It supplies the
-complete artifact inventory and every text-bearing artifact byte. Binary files
-are represented by their path, byte count, and digest. The structured verdict
-must match the complete artifact hash, state `allow`, report no uncertainty and
-no findings, and cover the required disclosure classes. The publisher hashes the
-artifact again immediately before upload, so the reviewed bytes and deployed
-bytes cannot silently diverge.
+read-only sandbox and an isolated temporary working directory. It first places
+the complete artifact in a content-addressed Nix store path, which unprivileged
+processes cannot change. Worker compilation has already happened before the
+artifact guardian runs. A pinned Wrangler dry run with bundling disabled must
+reproduce the stored executable byte for byte. The reviewer receives the store
+path's complete inventory and every text-bearing byte; invalid UTF-8 is rejected
+rather than decoded with replacement characters. The structured verdict must
+match the complete artifact hash, state `allow`, report no uncertainty and no
+findings, and cover the required disclosure classes. A standalone review may be
+retained as workflow evidence, but its file is not accepted as publication
+authority. The publisher gives the hosting provider the same immutable assets
+and pre-bundled Worker, keeps bundling disabled, and checks the store hash
+before and after upload.
 
 The reviewer's explicit public-identifier allowlist is narrow: `corbet.ch`,
 `cnix.corbet.ch`, the public cnix repository, and project showcase hostnames

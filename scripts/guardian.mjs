@@ -110,8 +110,6 @@ async function scanArtifact(directory) {
     "assets/sites/cnix/static/contentIndex.json",
     "site-manifest.json",
     "worker/index.mjs",
-    "worker/router.mjs",
-    "worker/sites.mjs",
     "wrangler.json",
   ])
   const observed = new Set(files.map((file) => file.relative))
@@ -144,7 +142,14 @@ async function scanArtifact(directory) {
         ".xml",
       ].includes(extension)
     ) {
-      const text = await readFile(file.path, "utf8")
+      const bytes = await readFile(file.path)
+      let text
+      try {
+        text = new TextDecoder("utf-8", { fatal: true }).decode(bytes)
+      } catch {
+        fail(`${file.relative}: artifact is not valid UTF-8`)
+        continue
+      }
       for (const finding of findSensitiveText(
         text,
         `artifact/${file.relative}`,
@@ -280,32 +285,23 @@ async function scanArtifact(directory) {
     }
   }
 
-  if (observed.has("worker/sites.mjs")) {
-    const module = await readFile(
-      path.join(artifact, "worker", "sites.mjs"),
+  if (observed.has("worker/index.mjs")) {
+    const worker = await readFile(
+      path.join(artifact, "worker", "index.mjs"),
       "utf8",
     )
-    const encoded = module.match(/^export default ([\s\S]+)\n$/)?.[1]
-    let workerSites = null
-    try {
-      workerSites = JSON.parse(encoded)
-    } catch {
-      fail("worker site map is not deterministic JSON")
+    for (const site of sites) {
+      const present = worker.includes(JSON.stringify(site.hostname))
+      if (present !== site.publish) {
+        fail(`pre-bundled worker publish state drifted for ${site.hostname}`)
+      }
     }
-    const expected = Object.fromEntries(
-      sites
-        .filter((site) => site.publish)
-        .map((site) => [
-          site.hostname,
-          {
-            kind: site.kind,
-            asset_key: site.asset_key,
-            ...(site.cnix_id ? { cnix_id: site.cnix_id } : {}),
-          },
-        ]),
-    )
-    if (JSON.stringify(workerSites) !== JSON.stringify(expected)) {
-      fail("worker site map does not exactly match the site manifest")
+    if (
+      !worker.includes("/sites/") ||
+      !worker.includes("https://cnix.corbet.ch/projects/") ||
+      /\bfrom\s+["']\.\//.test(worker)
+    ) {
+      fail("pre-bundled worker does not contain the self-contained host router")
     }
   }
 

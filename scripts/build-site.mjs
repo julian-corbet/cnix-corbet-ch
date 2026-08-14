@@ -38,6 +38,7 @@ try {
   if (!serve) {
     await run("scripts/enrich-artifact.mjs", [cnixArtifact])
     await run("scripts/build-showcases.mjs", [cnixArtifact, "public"])
+    await run("scripts/bundle-worker.mjs")
     await run("scripts/guardian.mjs", ["artifact", "public", projection])
   }
 } finally {

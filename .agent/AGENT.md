@@ -11,7 +11,8 @@ sources of truth.
 - Create tutorials from invented values; never transform private configuration.
 - Never give Quartz, Cloudflare, or a reviewer access to a private workspace.
 - Deploy only through `npm run deploy`; it binds a read-only adversarial verdict
-  to the exact artifact hash before invoking Cloudflare.
+  to the immutable, pre-bundled artifact before invoking Cloudflare with
+  bundling disabled.
 - Fix straightforward failures; record complex findings in `TODO.md` with a
   reproducible acceptance condition.
 

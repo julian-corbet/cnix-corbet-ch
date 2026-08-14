@@ -86,6 +86,14 @@ export function reviewerConfiguration(environment = process.env) {
   return { model, effort }
 }
 
+export function attestationEnvelope(attestation, reviewer) {
+  return {
+    attestation,
+    reviewer_model: reviewer.model,
+    reviewer_effort: reviewer.effort,
+  }
+}
+
 function runReviewer(directory, prompt, output) {
   const { model, effort } = reviewerConfiguration()
   const reviewerEnvironment = {}
@@ -185,9 +193,10 @@ project hostname. The future public product name nixea and its stated stable-ID
 adjacency to cnix are intentionally public. References to public projects such
 as Quartz and OKF are also intentionally public. This public repository's npm
 command names, CI checks, guardian design, contributor workflow, and documented
-release mechanics are public product behaviour. Generic descriptions of a
-private overlay or publication threat model are intended public information;
-specific real values are not. Do not extend this allowlist to a different
+release mechanics are public product behaviour. Generic Nix CLI mechanics and
+the literal prefix /nix/store are public, but a concrete store path or hash is
+not. Generic descriptions of a private overlay or publication threat model are
+intended public information; specific real values are not. Do not extend this allowlist to a different
 hostname pattern, an actual private value, provider account detail, credential,
 private source path, or real deployed configuration merely because it is
 mentioned near an allowed identifier.
@@ -223,9 +232,16 @@ export async function reviewArtifact(directory) {
     const content = []
     for (const entry of inventory.files) {
       if (isTextArtifactPath(entry.path)) {
+        const bytes = await readFile(path.join(artifact, entry.path))
+        let text
+        try {
+          text = new TextDecoder("utf-8", { fatal: true }).decode(bytes)
+        } catch {
+          throw new Error(`${entry.path}: artifact is not valid UTF-8`)
+        }
         content.push({
           path: entry.path,
-          text: await readFile(path.join(artifact, entry.path), "utf8"),
+          text,
         })
       }
     }

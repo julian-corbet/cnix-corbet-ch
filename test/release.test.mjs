@@ -1,10 +1,12 @@
 import assert from "node:assert/strict"
+import { spawnSync } from "node:child_process"
 import { mkdtemp, rm, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import path from "node:path"
 import test from "node:test"
 import {
   artifactInventory,
+  attestationEnvelope,
   isTextArtifactPath,
   reviewArtifact,
   reviewerConfiguration,
@@ -29,6 +31,22 @@ test("artifact review rejects non-text bytes before invoking a reviewer", async 
   }
 })
 
+test("artifact review rejects lossy UTF-8 before invoking a reviewer", async () => {
+  const directory = await mkdtemp(path.join(tmpdir(), "cnix-utf8-test-"))
+  try {
+    await writeFile(
+      path.join(directory, "index.html"),
+      Buffer.from([0xc3, 0x28]),
+    )
+    await assert.rejects(
+      reviewArtifact(directory),
+      /artifact is not valid UTF-8/,
+    )
+  } finally {
+    await rm(directory, { recursive: true, force: true })
+  }
+})
+
 test("artifact review has no silent reviewer default", () => {
   assert.throws(() => reviewerConfiguration({}), /Set CNIX_REVIEW_MODEL/)
   assert.deepEqual(
@@ -45,6 +63,7 @@ test("reviewer policy narrowly allowlists public showcase hostnames", () => {
   assert.match(prompt, /nix\[a-z0-9-\]\+\.corbet\.ch/)
   assert.match(prompt, /product name nixea/)
   assert.match(prompt, /npm\s+command names/)
+  assert.match(prompt, /literal prefix \/nix\/store/)
   assert.match(prompt, /Do not extend this allowlist/)
   assert.match(prompt, /<candidate-json>/)
 })
@@ -124,4 +143,49 @@ test("attestation accepts only an exact, certain allow verdict", () => {
       ),
     /findings/,
   )
+})
+
+test("standalone review envelope records reviewer configuration as evidence", () => {
+  const digest = "a".repeat(64)
+  const reviewer = { model: "reviewer", effort: "high" }
+  const attestation = {
+    schema_version: 1,
+    artifact_sha256: digest,
+    verdict: "allow",
+    uncertainty: false,
+    summary: "No private deployment information was found.",
+    findings: [],
+    reviewed_risks: [
+      "identities",
+      "topology",
+      "credentials",
+      "filesystem paths",
+      "configured values",
+    ],
+  }
+  const envelope = attestationEnvelope(attestation, reviewer)
+  assert.deepEqual(envelope, {
+    attestation,
+    reviewer_model: "reviewer",
+    reviewer_effort: "high",
+  })
+})
+
+test("deploy rejects unsigned cross-process review handoffs", () => {
+  const deployment = spawnSync(
+    process.execPath,
+    [path.resolve("scripts/deploy.mjs"), "--attestation", "review.json"],
+    {
+      cwd: path.resolve("."),
+      encoding: "utf8",
+      env: {
+        ...process.env,
+        CNIX_REVIEW_MODEL: "reviewer",
+        CNIX_REVIEW_EFFORT: "high",
+        CNIX_CLOUDFLARE_WORKER_NAME: "synthetic-release-target",
+      },
+    },
+  )
+  assert.notEqual(deployment.status, 0)
+  assert.match(deployment.stderr, /Unknown deploy argument: --attestation/)
 })

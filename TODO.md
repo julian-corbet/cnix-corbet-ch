@@ -10,7 +10,8 @@ that needs a dedicated investigation or changes the publication trust boundary.
 - Owner: agent
 - Evidence: `scripts/release-lib.mjs` gives an isolated read-only reviewer every
   text-bearing artifact byte and the complete inventory; `scripts/deploy.mjs`
-  verifies its structured verdict and re-hashes before upload.
+  verifies its structured verdict and gives the hosting provider the same
+  immutable, content-addressed Nix store path with Worker bundling disabled.
 - Acceptance: A separately configured strong model reviews the exact candidate
   artifact without write access, attempts to infer private deployment facts,
   returns a machine-readable verdict, and uncertainty blocks publication.
@@ -110,15 +111,31 @@ that needs a dedicated investigation or changes the publication trust boundary.
 
 ## CNIX-0010 — Review source before public promotion
 
-- Status: open
+- Status: done
 - Severity: critical
-- Owner: unassigned
-- Evidence: The repository is public, so a pushed candidate is visible in Git
-  history before CI or the exact-artifact deployment reviewer can reject it.
-  Deleting a file in a later commit does not retract the earlier publication.
+- Owner: agent
+- Evidence: The source promotion gate requires an isolated, clean, one-commit
+  descendant of public main; inventories and deterministically scans every tree
+  byte; semantically reviews every added or changed byte plus deletions,
+  renames, and the commit and base identities; runs the complete check; and
+  rechecks the tree and remote base before an exact push. Seeded private paths
+  and addresses fail before the reviewer or remote push.
 - Acceptance: Internal automation assembles the candidate in an isolated
   non-public workspace; an independent reviewer receives the exact candidate
   source inventory and bytes, denies uncertainty, and binds an allow verdict to
   its tree hash; only that unchanged tree can be promoted to the public default
   branch; seeded private operational details are rejected before any remote
   push; the artifact guardian remains a separate later gate.
+
+## CNIX-0011 — Authenticate reusable review evidence
+
+- Status: open
+- Severity: medium
+- Owner: unassigned
+- Evidence: Standalone source and artifact reviews are useful audit evidence,
+  but unsigned files cannot safely authorize a later push or deployment. The
+  current fail-closed path repeats review inside each publishing process.
+- Acceptance: A dedicated signing identity or review service authenticates the
+  exact source or artifact digest, reviewer policy version, and expiry; replay,
+  forgery, policy drift, and key-compromise regressions fail closed. Until then,
+  publication continues to repeat review rather than trust a file handoff.

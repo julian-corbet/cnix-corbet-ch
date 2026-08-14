@@ -527,7 +527,6 @@ export async function assembleReleaseBundle({
     path.join(output, "wrangler.json"),
     `${JSON.stringify(
       {
-        name: "cnix-corbet-ch",
         compatibility_date: "2026-08-12",
         main: "./worker/index.mjs",
         workers_dev: false,

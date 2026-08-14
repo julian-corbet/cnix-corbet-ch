@@ -22,6 +22,7 @@
     "check": "npm run lint && npm test && npm run build",
     "dev": "node scripts/build-site.mjs --serve",
     "format": "prettier . --write",
+    "review:artifact": "node scripts/review-artifact.mjs",
     "deploy": "node scripts/deploy.mjs"
   },
   "devDependencies": {
