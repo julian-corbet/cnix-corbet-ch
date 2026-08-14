@@ -168,6 +168,7 @@ try {
 
   console.log(`Adversarial reviewer accepted artifact ${inventory.sha256}`)
   const publicationTag = `cnix-${inventory.sha256.slice(0, 24)}`
+  const uploadOutput = path.join(temporary, "upload")
   await run("npm", [
     "exec",
     "--",
@@ -176,6 +177,8 @@ try {
     "--name",
     workerName,
     "--no-bundle",
+    "--outdir",
+    uploadOutput,
     "--config",
     path.join(deploymentArtifact, "wrangler.json"),
     "--tag",
