@@ -32,18 +32,23 @@
     "llms",
     "nixfixture",
     "nixea",
+    "nixos",
     "nixram",
     "nixstaged",
     "nosniff",
+    "oomd",
     "OpenKnowledge",
     "qrstuvwxyz",
     "Quartz",
     "rgba",
     "Segoe",
     "submodule",
+    "sysctls",
     "wikilinks",
     "wordmark",
     "Wrangler",
+    "zram",
+    "zswap",
     "labelledby"
   ]
 }
