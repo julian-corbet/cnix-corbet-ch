@@ -25,6 +25,7 @@ jobs:
           node-version-file: .node-version
           cache: npm
       - name: Install dependencies
+        id: deps
         run: npm ci
       - name: Scan Git history for secrets
         uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7
@@ -34,8 +35,19 @@ jobs:
           GITLEAKS_ENABLE_UPLOAD_ARTIFACT: false
       - name: Remove ephemeral scanner report
         run: rm -- results.sarif
-      - name: Lint, test, and build
-        run: npm run check
+      # `npm run check` chains lint && test && build behind `&&`, so the first failure
+      # hid the verdicts of the other two. These are the same three scripts in the same
+      # order, one step each, so every run reports all three. Gated on the install only
+      # -- node_modules is their one real dependency; a failed lint must not skip them.
+      - name: Lint
+        if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
+        run: npm run lint
+      - name: Test
+        if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
+        run: npm test
+      - name: Build site
+        if: ${{ !cancelled() && steps.deps.outcome == 'success' }}
+        run: npm run build
       - name: Preserve reviewed website artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
