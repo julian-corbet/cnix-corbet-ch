@@ -11,6 +11,9 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-24.04
+    # The whole verification runs in well under a minute; this leaves ample headroom for a
+    # cold npm cache while still killing a wedged run long before the six-hour default.
+    timeout-minutes: 15
     steps:
       - name: Check out source
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
