@@ -21,3 +21,11 @@ boundary, the static build, and the emitted artifact.
 
 Changes to workflows, dependencies, schemas, the guardian, raw HTML, or media
 need maintainer review because they change the publication trust boundary.
+
+## Contributor agreement
+
+By submitting a contribution, you agree to the
+[Individual Contributor License Agreement](https://github.com/corbet-labs/.github/blob/cla-v1.0/CLA.md).
+Include this exact affirmation in your pull request description:
+
+> I have read and agree to version 1.0 of the Individual Contributor License Agreement at https://github.com/corbet-labs/.github/blob/cla-v1.0/CLA.md.
