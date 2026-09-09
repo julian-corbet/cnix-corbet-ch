@@ -1,0 +1,16 @@
+schema = 1
+project = "cnix"
+
+# Source/artifact validation only. Existing independent artifact review and operator publication policy remain required.
+
+[checks.check]
+kind = "javascript"
+manager = "npm"
+scripts = ["check"]
+install = true
+
+[checks.test]
+kind = "javascript"
+manager = "npm"
+scripts = ["test"]
+install = true
